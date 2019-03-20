@@ -4,7 +4,7 @@ workflows:
   version: 2
   test:
     jobs:
-      - alpine:
+      - alpine38:
           requires:
 
 shared:
@@ -167,7 +167,7 @@ jobs:
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
-  alpine:
+  alpine38:
     docker:
       - image: alpine:3.8
     environment: *environment
