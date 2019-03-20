@@ -178,7 +178,7 @@ jobs:
           command: |
             apk add --no-cache ca-certificates krb5-libs libgcc libintl libssl1.0 libstdc++ tzdata userspace-rcu zlib curl bash icu-libs
             apk -X https://dl-cdn.alpinelinux.org/alpine/edge/main add --no-cache lttng-ust
-            echo 'export PATH=~/.dotnet:$PATH' >> /etc/profile
+            export PATH=~/.dotnet:$PATH
       - *dotnet-install-2-2
       - checkout
       - *generate-restore-graph
