@@ -4,35 +4,8 @@ workflows:
   version: 2
   test:
     jobs:
-      - centos7:
+      - alpine:
           requires:
-            - macos
-      - debian8:
-          requires:
-            - macos
-      - debian9:
-          requires:
-            - macos
-      - fedora27:
-          requires:
-            - macos
-      - fedora28:
-          requires:
-            - macos
-      - opensuse42.3:
-          requires:
-            - macos
-      - ubuntu14.04:
-          requires:
-            - macos
-      - ubuntu16.04:
-          requires:
-      - ubuntu18.04:
-          requires:
-            - macos
-      - macos:
-          requires:
-            - ubuntu16.04
 
 shared:
   environment: &environment
@@ -193,6 +166,27 @@ jobs:
       - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
+
+  alpine:
+    docker:
+      - image: alpine:3.8
+    environment: *environment
+    steps:
+      - run:
+          name: Install Prerequisites
+          no_output_timeout: 2m
+          command: |
+            apk add --no-cache ca-certificates krb5-libs libgcc libintl libssl1.0 libstdc++ tzdata userspace-rcu zlib curl bash icu-libs
+            apk -X https://dl-cdn.alpinelinux.org/alpine/edge/main add --no-cache lttng-ust
+            sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd
+      - *dotnet-install-2-2
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache
+      - *dotnet-restore
+      - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
 
   fedora27:
     docker:
